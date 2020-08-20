@@ -1,5 +1,5 @@
 void setup() {
-  Serial.begin(115200);
+  Serial1.begin(115200);
   pinMode(5, OUTPUT);
 }
 
@@ -7,7 +7,7 @@ void loop() {
   /*
     if (Serial.available() > 0) {
     //char value = Serial.read();
-    int value = Serial.parseInt();
+    int value  = Serial.parseInt();
     //Serial.write(49); 아스키 값으로 출력 (binary data)
     Serial.print(value);
 
@@ -32,9 +32,9 @@ void loop() {
   */
 
   //  control motor speed
-  if (Serial.available() > 0) {
-    char userInput = Serial.read();
-    Serial.println(userInput);
+  if (Serial1.available() > 0) {
+    char userInput = Serial1.read();
+    Serial1.println(userInput);
 
     if (userInput >= '0' && userInput <= '9') {
       int throttle = (userInput - '0') * 10;
