@@ -1,5 +1,4 @@
 /*자이로센서 GyroSensor*/
-
 #include <Wire.h> //IC2통신할  때 필요한 파일. 
 
 void setup() {
@@ -10,8 +9,6 @@ void setup() {
   Wire.write(0x6b); //전송하고자 하는 1바이트 데이터를 내부 메모리 큐에 저장하는 역할
   Wire.write(0x0); // 0 sleep모드 해지
   Wire.endTransmission(true); //통신 끝
-
-
 }
 
 int throttle = 0;
@@ -90,6 +87,18 @@ void loop() {
   BalZ += Kd * -GyZR;
   if (throttle == 0)BalX = BalY = BalZ = 0.0;
   /* 회전 속도 상쇄 end */
+
+  /* 목표 각도 도달하기 start */
+  double Ki = 1.0; // 증폭값 저장 변수
+  static double ResX , ResY, ResZ = 0.0; // 목표에 도달한 힘 값을 저장할 변수
+  ResX += Ki * eAngleX * dt;
+  ResY += Ki * eAngleY * dt;
+  ResZ += Ki * eAngleZ * dt;
+  if (throttle == 0)ResX = ResY = ResZ = 0.0;
+  BalX += ResX;
+  BalY += ResY;
+  BalZ += ResX;
+  /* 목표 각도 도달하기 end */
 
   if (Serial.available() > 0) {
     while (Serial.available() > 0) {
